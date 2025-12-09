@@ -1,0 +1,91 @@
+﻿@model RimansaRealEstate.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Admin Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Rimansa Real Estate</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="login-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="login-card">
+                    <div class="row g-0">
+                        <!-- Left Side -->
+                        <div class="col-md-5 login-left">
+                            <div class="login-logo">
+                                🏢
+                            </div>
+                            <h2 class="fw-bold mb-3">RIMANSA</h2>
+                            <h4 class="mb-3">Real Estate</h4>
+                            <p class="mb-4">Panel de Administración</p>
+                        </div>
+
+                        <!-- Right Side -->
+                        <div class="col-md-7 login-right">
+                            <div class="mb-4">
+                                <h3 class="fw-bold" style="color: #1e3a5f;">Iniciar Sesión</h3>
+                                <p class="text-muted">Ingresa tus credenciales de administrador</p>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-exclamation-circle"></i> @ViewBag.ErrorMessage
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+
+                            <form asp-action="Login" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Username" class="form-label fw-bold" style="color: #1e3a5f;">
+                                        <i class="fas fa-user"></i> Usuario
+                                    </label>
+                                    <input asp-for="Username" class="form-control form-control-lg" placeholder="Ingresa tu usuario" />
+                                    <span asp-validation-for="Username" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Password" class="form-label fw-bold" style="color: #1e3a5f;">
+                                        <i class="fas fa-lock"></i> Contraseña
+                                    </label>
+                                    <input asp-for="Password" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" type="password" />
+                                    <span asp-validation-for="Password" class="text-danger small"></span>
+                                </div>
+
+                                <button type="submit" class="btn btn-danger btn-lg w-100 btn-login">
+                                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                                </button>
+
+                                <div class="text-center mt-4">
+                                    <a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none">
+                                        <i class="fas fa-arrow-left"></i> Volver al sitio
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

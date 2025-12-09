@@ -1,0 +1,128 @@
+﻿@model IEnumerable<RimansaRealEstate.Models.Property>
+
+@{
+    ViewData["Title"] = "Dashboard Admin";
+}
+
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold" style="color: #1e3a5f;">
+                <i class="fas fa-tachometer-alt"></i> Dashboard de Administración
+            </h2>
+            <p class="text-muted">Bienvenido, @User.Identity?.Name</p>
+        </div>
+        <div class="col text-end">
+            <a asp-controller="Properties" asp-action="Create" class="btn btn-danger">
+                <i class="fas fa-plus"></i> Nueva Propiedad
+            </a>
+            <a asp-controller="Properties" asp-action="Index" class="btn btn-outline-primary">
+                <i class="fas fa-list"></i> Ver Todas
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="dashboard-card bg-primary text-white">
+                <h3>@ViewBag.TotalProperties</h3>
+                <p><i class="fas fa-building"></i> Total Propiedades</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-success text-white">
+                <h3>@ViewBag.ActiveProperties</h3>
+                <p><i class="fas fa-check-circle"></i> Activas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-danger text-white">
+                <h3>@ViewBag.ForSale</h3>
+                <p><i class="fas fa-tag"></i> En Venta</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-info text-white">
+                <h3>@ViewBag.ForRent</h3>
+                <p><i class="fas fa-key"></i> En Alquiler</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Properties -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 fw-bold" style="color: #1e3a5f;">
+                <i class="fas fa-clock"></i> Propiedades Recientes
+            </h5>
+        </div>
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Ubicación</th>
+                                <th>Precio</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var property in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@property.Title</td>
+                                    <td>
+                                        <i class="fas fa-map-marker-alt text-danger"></i> @property.Location
+                                    </td>
+                                    <td class="text-success fw-bold">
+                                        $@property.Price.ToString("N0")
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">@property.Type</span>
+                                    </td>
+                                    <td>
+                                        @if (property.Status == RimansaRealEstate.Models.PropertyStatus.Venta)
+                                        {
+                                            <span class="badge bg-danger">Venta</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info">Alquiler</span>
+                                        }
+                                    </td>
+                                    <td class="text-muted small">
+                                        @property.CreatedAt.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Properties" asp-action="Edit" asp-route-id="@property.Id"
+                                           class="btn btn-sm btn-outline-primary" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-controller="Home" asp-action="Details" asp-route-id="@property.Id"
+                                           class="btn btn-sm btn-outline-info" title="Ver" target="_blank">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No hay propiedades registradas aún.
+                    <a asp-controller="Properties" asp-action="Create" class="alert-link">Crear una ahora</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

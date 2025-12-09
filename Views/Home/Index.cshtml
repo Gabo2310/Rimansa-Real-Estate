@@ -1,0 +1,157 @@
+﻿@model IEnumerable<RimansaRealEstate.Models.Property>
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <h1>Encuentra Tu Hogar Ideal</h1>
+        <p class="lead">Las mejores propiedades en República Dominicana</p>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <form asp-controller="Home" asp-action="Properties" method="get">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <select name="type" class="form-select">
+                            <option value="">Tipo de Propiedad</option>
+                            <option value="Casa">Casa</option>
+                            <option value="Apartamento">Apartamento</option>
+                            <option value="Terreno">Terreno</option>
+                            <option value="LocalComercial">Local Comercial</option>
+                            <option value="Penthouse">Penthouse</option>
+                            <option value="Villa">Villa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="location" class="form-control" placeholder="Ubicación">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="minPrice" class="form-control" placeholder="Precio Mín">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="maxPrice" class="form-control" placeholder="Precio Máx">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Properties Section -->
+<section class="container my-5">
+    <h2 class="text-center mb-4" style="color: var(--primary-color);">Propiedades Destacadas</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var property in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card property-card">
+                        <div class="property-image">
+                            @switch (property.Type)
+                            {
+                                case RimansaRealEstate.Models.PropertyType.Casa:
+                                    <span>🏡</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Apartamento:
+                                    <span>🏢</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Terreno:
+                                    <span>🏞️</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.LocalComercial:
+                                    <span>🏪</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Penthouse:
+                                    <span>🌴</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Villa:
+                                    <span>🏠</span>
+                                    break;
+                            }
+                            <span class="property-badge">@property.Status</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="property-price">
+                                @if (property.Status == RimansaRealEstate.Models.PropertyStatus.Alquiler)
+                                {
+                                    <text>$@property.Price.ToString("N0")/mes</text>
+                                }
+                                else
+                                {
+                                    <text>$@property.Price.ToString("N0")</text>
+                                }
+                            </div>
+                            <h5 class="card-title">@property.Title</h5>
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-map-marker-alt"></i> @property.Location
+                            </p>
+                            <div class="property-features mb-3">
+                                @if (property.Bedrooms.HasValue)
+                                {
+                                    <span><i class="fas fa-bed"></i> @property.Bedrooms</span>
+                                }
+                                @if (property.Bathrooms.HasValue)
+                                {
+                                    <span><i class="fas fa-bath"></i> @property.Bathrooms</span>
+                                }
+                                @if (property.AreaSquareMeters.HasValue)
+                                {
+                                    <span><i class="fas fa-ruler-combined"></i> @property.AreaSquareMeters m²</span>
+                                }
+                            </div>
+                            <a asp-controller="Home" asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-danger w-100">
+                                Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-controller="Home" asp-action="Properties" class="btn btn-danger btn-lg">
+                Ver Todas las Propiedades <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> No hay propiedades disponibles en este momento.
+        </div>
+    }
+</section>
+
+<!-- Stats Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <h3 class="text-danger fw-bold">500+</h3>
+                <p class="text-muted">Propiedades</p>
+            </div>
+            <div class="col-md-3">
+                <h3 class="text-danger fw-bold">1,200+</h3>
+                <p class="text-muted">Clientes Felices</p>
+            </div>
+            <div class="col-md-3">
+                <h3 class="text-danger fw-bold">15+</h3>
+                <p class="text-muted">Años de Experiencia</p>
+            </div>
+            <div class="col-md-3">
+                <h3 class="text-danger fw-bold">50+</h3>
+                <p class="text-muted">Agentes</p>
+            </div>
+        </div>
+    </div>
+</section>

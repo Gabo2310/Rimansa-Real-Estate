@@ -1,0 +1,311 @@
+﻿@model RimansaRealEstate.Models.Property
+@using Microsoft.AspNetCore.Http.Extensions
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<!-- Property Header -->
+<section class="py-3 bg-light">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="background: transparent; font-size: 0.9rem;">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Home" asp-action="Index" class="text-danger text-decoration-none">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-controller="Home" asp-action="Properties" class="text-decoration-none">
+                        Propiedades
+                    </a>
+                </li>
+                <li class="breadcrumb-item active text-truncate" style="max-width: 400px;">
+                    @Model.Title
+                </li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Property Details -->
+<section class="container my-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Image Gallery -->
+            <div class="card shadow-sm mb-4">
+                <div class="property-image" style="height: 400px; font-size: 8rem;">
+                    @switch (Model.Type)
+                    {
+                        case RimansaRealEstate.Models.PropertyType.Casa:
+                            <span>🏡</span>
+                            break;
+                        case RimansaRealEstate.Models.PropertyType.Apartamento:
+                            <span>🏢</span>
+                            break;
+                        case RimansaRealEstate.Models.PropertyType.Terreno:
+                            <span>🏞️</span>
+                            break;
+                        case RimansaRealEstate.Models.PropertyType.LocalComercial:
+                            <span>🏪</span>
+                            break;
+                        case RimansaRealEstate.Models.PropertyType.Penthouse:
+                            <span>🌴</span>
+                            break;
+                        case RimansaRealEstate.Models.PropertyType.Villa:
+                            <span>🏠</span>
+                            break;
+                    }
+                    <span class="property-badge" style="font-size: 1rem;">@Model.Status</span>
+                </div>
+            </div>
+
+            <!-- Property Info -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h1 class="fw-bold mb-3" style="color: #1e3a5f;">@Model.Title</h1>
+
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="me-4">
+                            <h2 class="text-danger fw-bold mb-0">
+                                @if (Model.Status == RimansaRealEstate.Models.PropertyStatus.Alquiler)
+                                {
+                                    <text>$@Model.Price.ToString("N0")<small class="text-muted fs-6">/mes</small></text>
+                                }
+                                else
+                                {
+                                    <text>$@Model.Price.ToString("N0")</text>
+                                }
+                            </h2>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0">
+                                <i class="fas fa-map-marker-alt text-danger"></i> @Model.Location
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="row mb-4">
+                        @if (Model.Bedrooms.HasValue)
+                        {
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <i class="fas fa-bed fa-2x text-danger mb-2"></i>
+                                    <h5 class="mb-0">@Model.Bedrooms</h5>
+                                    <small class="text-muted">Habitaciones</small>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.Bathrooms.HasValue)
+                        {
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <i class="fas fa-bath fa-2x text-danger mb-2"></i>
+                                    <h5 class="mb-0">@Model.Bathrooms</h5>
+                                    <small class="text-muted">Baños</small>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.AreaSquareMeters.HasValue)
+                        {
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <i class="fas fa-ruler-combined fa-2x text-danger mb-2"></i>
+                                    <h5 class="mb-0">@Model.AreaSquareMeters</h5>
+                                    <small class="text-muted">m²</small>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <i class="fas fa-home fa-2x text-danger mb-2"></i>
+                                <h5 class="mb-0">@Model.Type</h5>
+                                <small class="text-muted">Tipo</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Description -->
+                    <h4 class="fw-bold mb-3" style="color: #1e3a5f;">
+                        <i class="fas fa-info-circle"></i> Descripción
+                    </h4>
+                    <p class="text-muted" style="text-align: justify; line-height: 1.8;">
+                        @Model.Description
+                    </p>
+                </div>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-3" style="color: #1e3a5f;">
+                        <i class="fas fa-list-ul"></i> Detalles Adicionales
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Tipo de Propiedad:</strong>
+                            <p class="text-muted">@Model.Type</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Estado:</strong>
+                            <p>
+                                @if (Model.Status == RimansaRealEstate.Models.PropertyStatus.Venta)
+                                {
+                                    <span class="badge bg-danger">En Venta</span>
+                                }
+                                else if (Model.Status == RimansaRealEstate.Models.PropertyStatus.Alquiler)
+                                {
+                                    <span class="badge bg-info">En Alquiler</span>
+                                }
+                                else if (Model.Status == RimansaRealEstate.Models.PropertyStatus.Vendido)
+                                {
+                                    <span class="badge bg-success">Vendido</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-dark">Alquilado</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Ubicación:</strong>
+                            <p class="text-muted">
+                                <i class="fas fa-map-marker-alt text-danger"></i> @Model.Location
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Publicado:</strong>
+                            <p class="text-muted">@Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <div class="col-md-6 mb-3">
+                                <strong>Última Actualización:</strong>
+                                <p class="text-muted">@Model.UpdatedAt.Value.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Contact Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-phone-alt"></i> Contáctanos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">
+                        ¿Interesado en esta propiedad? Nuestros agentes están listos para ayudarte.
+                    </p>
+
+                    <div class="d-grid gap-2">
+                        <a href="tel:+18098601893" class="btn btn-danger">
+                            <i class="fas fa-phone"></i> Llamar Ahora
+                        </a>
+                        <a href="https://wa.me/18098601893?text=Hola, estoy interesado en la propiedad: @Model.Title"
+                           class="btn btn-success"
+                           target="_blank">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="mailto:gabrielalejandro1893@gmail.com?subject=Consulta sobre @Model.Title"
+                           class="btn btn-outline-primary">
+                            <i class="fas fa-envelope"></i> Enviar Email
+                        </a>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="small text-muted mb-2">
+                            <i class="fas fa-clock"></i> Horario de Atención
+                        </p>
+                        <p class="small">
+                            <strong>Lun - Vie:</strong> 9:00 AM - 6:00 PM<br>
+                            <strong>Sábado:</strong> 9:00 AM - 2:00 PM
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Share Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h6 class="fw-bold mb-3">Compartir esta propiedad</h6>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=@Context.Request.GetDisplayUrl()"
+                           target="_blank"
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url=@Context.Request.GetDisplayUrl()&text=@Model.Title"
+                           target="_blank"
+                           class="btn btn-outline-info btn-sm">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://wa.me/?text=Mira esta propiedad: @Model.Title - @Context.Request.GetDisplayUrl()"
+                           target="_blank"
+                           class="btn btn-outline-success btn-sm">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Card -->
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-shield-alt text-danger"></i> Compra Segura
+                    </h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success"></i> Propiedades verificadas
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success"></i> Asesoría legal incluida
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success"></i> Financiamiento disponible
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success"></i> Agentes certificados
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Similar Properties -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h3 class="text-center mb-4" style="color: #1e3a5f;">
+            Propiedades Similares
+        </h3>
+        <div class="text-center">
+            <a asp-action="Properties" asp-route-type="@Model.Type" class="btn btn-danger">
+                <i class="fas fa-search"></i> Ver propiedades de tipo @Model.Type
+            </a>
+            <a asp-action="Properties" asp-route-location="@Model.Location" class="btn btn-outline-primary">
+                <i class="fas fa-map-marker-alt"></i> Ver propiedades en @Model.Location
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Back Button -->
+<section class="container my-4">
+    <a asp-action="Properties" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Volver a Propiedades
+    </a>
+</section>

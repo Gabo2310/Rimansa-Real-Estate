@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Acceso Denegado";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="py-5">
+                <i class="fas fa-lock" style="font-size: 5rem; color: #e63946;"></i>
+                <h2 class="mt-4 fw-bold" style="color: #1e3a5f;">Acceso Denegado</h2>
+                <p class="lead text-muted">No tienes permisos para acceder a esta página.</p>
+                <div class="mt-4">
+                    <a asp-controller="Admin" asp-action="Login" class="btn btn-danger me-2">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+                        <i class="fas fa-home"></i> Volver al Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,159 @@
+﻿@model IEnumerable<RimansaRealEstate.Models.Property>
+
+@{
+    ViewData["Title"] = "Todas las Propiedades";
+}
+
+<!-- Search Bar -->
+<section class="bg-light py-4">
+    <div class="container">
+        <h2 class="text-center mb-4" style="color: #1e3a5f;">
+            <i class="fas fa-search"></i> Buscar Propiedades
+        </h2>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="get" asp-action="Properties">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label small">Tipo de Propiedad</label>
+                            <select name="type" class="form-select">
+                                <option value="">Todos los tipos</option>
+                                <option value="Casa">Casa</option>
+                                <option value="Apartamento">Apartamento</option>
+                                <option value="Terreno">Terreno</option>
+                                <option value="LocalComercial">Local Comercial</option>
+                                <option value="Penthouse">Penthouse</option>
+                                <option value="Villa">Villa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Ubicación</label>
+                            <input type="text" name="location" class="form-control" placeholder="Ciudad o zona" value="@Context.Request.Query["location"]">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Precio Mínimo</label>
+                            <input type="number" name="minPrice" class="form-control" placeholder="0" value="@Context.Request.Query["minPrice"]">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Precio Máximo</label>
+                            <input type="number" name="maxPrice" class="form-control" placeholder="1000000" value="@Context.Request.Query["maxPrice"]">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Properties Grid -->
+<section class="container my-5">
+    @if (Context.Request.Query.Count > 0)
+    {
+        <div class="alert alert-info alert-dismissible fade show">
+            <i class="fas fa-filter"></i> Mostrando resultados filtrados.
+            <a asp-action="Properties" class="alert-link">Ver todas las propiedades</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row mb-4">
+        <div class="col">
+            <h3 style="color: #1e3a5f;">
+                @if (Model != null && Model.Any())
+                {
+                    <text>Encontramos @Model.Count() propiedad(es)</text>
+                }
+                else
+                {
+                    <text>Propiedades Disponibles</text>
+                }
+            </h3>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var property in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card property-card h-100">
+                        <div class="property-image">
+                            @switch (property.Type)
+                            {
+                                case RimansaRealEstate.Models.PropertyType.Casa:
+                                    <span>🏡</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Apartamento:
+                                    <span>🏢</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Terreno:
+                                    <span>🏞️</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.LocalComercial:
+                                    <span>🏪</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Penthouse:
+                                    <span>🌴</span>
+                                    break;
+                                case RimansaRealEstate.Models.PropertyType.Villa:
+                                    <span>🏠</span>
+                                    break;
+                            }
+                            <span class="property-badge">@property.Status</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="property-price">
+                                @if (property.Status == RimansaRealEstate.Models.PropertyStatus.Alquiler)
+                                {
+                                    <text>$@property.Price.ToString("N0")/mes</text>
+                                }
+                                else
+                                {
+                                    <text>$@property.Price.ToString("N0")</text>
+                                }
+                            </div>
+                            <h5 class="card-title">@property.Title</h5>
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-map-marker-alt"></i> @property.Location
+                            </p>
+                            <div class="property-features mb-3">
+                                @if (property.Bedrooms.HasValue)
+                                {
+                                    <span><i class="fas fa-bed"></i> @property.Bedrooms</span>
+                                }
+                                @if (property.Bathrooms.HasValue)
+                                {
+                                    <span><i class="fas fa-bath"></i> @property.Bathrooms</span>
+                                }
+                                @if (property.AreaSquareMeters.HasValue)
+                                {
+                                    <span><i class="fas fa-ruler-combined"></i> @property.AreaSquareMeters m²</span>
+                                }
+                            </div>
+                            <a asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-danger w-100 mt-auto">
+                                Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-search" style="font-size: 3rem; opacity: 0.3;"></i>
+            <h4 class="mt-3">No se encontraron propiedades</h4>
+            <p class="text-muted">
+                Intenta ajustar los filtros de búsqueda o
+                <a asp-action="Properties" class="alert-link">ver todas las propiedades</a>
+            </p>
+        </div>
+    }
+</section>
