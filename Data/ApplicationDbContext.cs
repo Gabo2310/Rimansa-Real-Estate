@@ -17,7 +17,6 @@ namespace RimansaRealEstate.Data
         {
             base.OnConfiguring(optionsBuilder);
 
-            // Suprimir la advertencia de cambios pendientes en .NET 9
             optionsBuilder.ConfigureWarnings(warnings =>
                 warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
         }
@@ -26,7 +25,6 @@ namespace RimansaRealEstate.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuración de precisión decimal
             modelBuilder.Entity<Property>()
                 .Property(p => p.Price)
                 .HasPrecision(18, 2);
@@ -35,7 +33,6 @@ namespace RimansaRealEstate.Data
                 .Property(p => p.AreaSquareMeters)
                 .HasPrecision(18, 2);
 
-            // Seed inicial - Admin por defecto
             modelBuilder.Entity<Admin>().HasData(
                 new Admin
                 {
@@ -49,7 +46,6 @@ namespace RimansaRealEstate.Data
                 }
             );
 
-            // Seed de propiedades de ejemplo
             modelBuilder.Entity<Property>().HasData(
                 new Property
                 {

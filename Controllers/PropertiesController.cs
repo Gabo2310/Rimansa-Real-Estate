@@ -16,19 +16,16 @@ namespace RimansaRealEstate.Controllers
             _context = context;
         }
 
-        // GET: Properties
         public async Task<IActionResult> Index()
         {
             return View(await _context.Properties.OrderByDescending(p => p.CreatedAt).ToListAsync());
         }
 
-        // GET: Properties/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Properties/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Price,Location,Type,Status,Bedrooms,Bathrooms,AreaSquareMeters,ImageUrl,IsActive")] Property property)
@@ -44,7 +41,6 @@ namespace RimansaRealEstate.Controllers
             return View(property);
         }
 
-        // GET: Properties/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -60,7 +56,6 @@ namespace RimansaRealEstate.Controllers
             return View(property);
         }
 
-        // POST: Properties/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,Location,Type,Status,Bedrooms,Bathrooms,AreaSquareMeters,ImageUrl,CreatedAt,IsActive")] Property property)
@@ -95,7 +90,6 @@ namespace RimansaRealEstate.Controllers
             return View(property);
         }
 
-        // GET: Properties/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -113,7 +107,6 @@ namespace RimansaRealEstate.Controllers
             return View(property);
         }
 
-        // POST: Properties/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

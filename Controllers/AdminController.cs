@@ -18,11 +18,9 @@ namespace RimansaRealEstate.Controllers
             _context = context;
         }
 
-        // GET: Admin/Login
         [AllowAnonymous]
         public IActionResult Login()
         {
-            // Si ya está autenticado, redirigir al dashboard
             if (User.Identity?.IsAuthenticated == true)
             {
                 return RedirectToAction("Dashboard");
@@ -30,7 +28,6 @@ namespace RimansaRealEstate.Controllers
             return View();
         }
 
-        // POST: Admin/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -43,11 +40,9 @@ namespace RimansaRealEstate.Controllers
 
                 if (admin != null && BCrypt.Net.BCrypt.Verify(model.Password, admin.PasswordHash))
                 {
-                    // Actualizar último login
                     admin.LastLogin = DateTime.Now;
                     await _context.SaveChangesAsync();
 
-                    // Crear claims
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, admin.Username),
@@ -59,8 +54,8 @@ namespace RimansaRealEstate.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var authProperties = new AuthenticationProperties
                     {
-                        IsPersistent = true, // Siempre persistente
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8) // 8 horas de sesión
+                        IsPersistent = true, 
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8) 
                     };
 
                     await HttpContext.SignInAsync(
@@ -77,7 +72,6 @@ namespace RimansaRealEstate.Controllers
             return View(model);
         }
 
-        // GET: Admin/Dashboard
         [Authorize]
         public async Task<IActionResult> Dashboard()
         {
@@ -99,7 +93,6 @@ namespace RimansaRealEstate.Controllers
             return View(recentProperties);
         }
 
-        // POST: Admin/Logout
         [Authorize]
         public async Task<IActionResult> Logout()
         {
@@ -107,7 +100,6 @@ namespace RimansaRealEstate.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: Admin/AccessDenied
         public IActionResult AccessDenied()
         {
             return View();

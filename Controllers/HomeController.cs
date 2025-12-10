@@ -43,7 +43,6 @@ namespace RimansaRealEstate.Controllers
 
             if (!string.IsNullOrEmpty(location))
             {
-                // Normalizar tanto el texto de búsqueda como los datos en BD
                 var normalizedSearch = RemoveAccents(location.ToLower());
 
                 var allProperties = await query.ToListAsync();
