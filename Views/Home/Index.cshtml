@@ -57,29 +57,19 @@
                 <div class="col-md-4">
                     <div class="card property-card">
                         <div class="property-image">
-                            @switch (property.Type)
+                            @if (!string.IsNullOrEmpty(property.ImageUrl))
                             {
-                                case RimansaRealEstate.Models.PropertyType.Casa:
-                                    <span>🏡</span>
-                                    break;
-                                case RimansaRealEstate.Models.PropertyType.Apartamento:
-                                    <span>🏢</span>
-                                    break;
-                                case RimansaRealEstate.Models.PropertyType.Terreno:
-                                    <span>🏞️</span>
-                                    break;
-                                case RimansaRealEstate.Models.PropertyType.LocalComercial:
-                                    <span>🏪</span>
-                                    break;
-                                case RimansaRealEstate.Models.PropertyType.Penthouse:
-                                    <span>🌴</span>
-                                    break;
-                                case RimansaRealEstate.Models.PropertyType.Villa:
-                                    <span>🏠</span>
-                                    break;
+                                <img src="@Url.Content(property.ImageUrl)" class="property-img" />
                             }
+                            else
+                            {
+                                <img src="~/images/no-image.png" class="property-img" />
+                            }
+
                             <span class="property-badge">@property.Status</span>
                         </div>
+
+
                         <div class="card-body">
                             <div class="property-price">
                                 @if (property.Status == RimansaRealEstate.Models.PropertyStatus.Alquiler)

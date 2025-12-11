@@ -34,29 +34,41 @@
         <div class="col-lg-8">
             <div class="card shadow-sm mb-4">
                 <div class="property-image" style="height: 400px; font-size: 8rem;">
-                    @switch (Model.Type)
+                    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                     {
-                        case RimansaRealEstate.Models.PropertyType.Casa:
-                            <span>🏡</span>
-                            break;
-                        case RimansaRealEstate.Models.PropertyType.Apartamento:
-                            <span>🏢</span>
-                            break;
-                        case RimansaRealEstate.Models.PropertyType.Terreno:
-                            <span>🏞️</span>
-                            break;
-                        case RimansaRealEstate.Models.PropertyType.LocalComercial:
-                            <span>🏪</span>
-                            break;
-                        case RimansaRealEstate.Models.PropertyType.Penthouse:
-                            <span>🌴</span>
-                            break;
-                        case RimansaRealEstate.Models.PropertyType.Villa:
-                            <span>🏠</span>
-                            break;
+                        <img src="@Model.ImageUrl"
+                             alt="@Model.Title"
+                             class="img-fluid w-100 h-100"
+                             style="object-fit: cover;" />
                     }
+                    else
+                    {
+                        @switch (Model.Type)
+                        {
+                            case RimansaRealEstate.Models.PropertyType.Casa:
+                                <span>🏡</span>
+                                break;
+                            case RimansaRealEstate.Models.PropertyType.Apartamento:
+                                <span>🏢</span>
+                                break;
+                            case RimansaRealEstate.Models.PropertyType.Terreno:
+                                <span>🏞️</span>
+                                break;
+                            case RimansaRealEstate.Models.PropertyType.LocalComercial:
+                                <span>🏪</span>
+                                break;
+                            case RimansaRealEstate.Models.PropertyType.Penthouse:
+                                <span>🌴</span>
+                                break;
+                            case RimansaRealEstate.Models.PropertyType.Villa:
+                                <span>🏠</span>
+                                break;
+                        }
+                    }
+
                     <span class="property-badge" style="font-size: 1rem;">@Model.Status</span>
                 </div>
+
             </div>
 
             <!-- Property Info -->
